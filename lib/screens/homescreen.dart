@@ -1,9 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_news_app/screens/components/categories.dart';
 import 'package:flutter_news_app/screens/components/top_screen.dart';
 import 'package:flutter_news_app/services/news_services.dart';
 import 'package:flutter_news_app/view_model/data_viewmodel.dart';
-import 'package:flutter_news_app/view_model/theme_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -11,57 +11,68 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<ThemeProvider>();
-    final prov = context.watch<DataProvider>();
+    
+    
     return SafeArea(
       child: Scaffold(
           body: Column(
-        children: [
-          TopScreen(
-            prov: provider,
+        children: const [
+          MyAppBar(
+          
           ),
-          const Categories(),
-          NewsData(type: prov.datatype)
-        ],
+           Categories(),
+          NewsData(
+          )],
       )),
     );
   }
 }
 
 class NewsData extends StatelessWidget {
-  const NewsData({super.key, required this.type});
-  final String type;
+  const NewsData({super.key, });
+ 
   @override
   Widget build(BuildContext context) {
+    final prov = context.watch<DataProvider>();
     return Expanded(
       child: FutureBuilder(
-          future: NewsServices.getNewsApi(type),
+          future: NewsServices.getNewsApi(prov.datatype),
+          
+         
           builder: (context, snapshot) {
+           
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+
+              // ignore: deprecated_member_use
+              return  Center(child: CircularProgressIndicator(color:   Theme.of(context).accentColor));
             } else if (!snapshot.hasData) {
-              return Center(
-                child: Text('Data not found'),
+              
+              return const Center(
+                
+                child: Text('Check your internet connection. :")'),
               );
             } else {
-              print(snapshot.data!.response!.docs!.length);
+              
+              if (kDebugMode) {
+                print(snapshot.data!.articles!.length);
+              }
               return ListView.builder(
                   physics: const BouncingScrollPhysics(),
-                  itemCount: snapshot.data!.response!.docs!.length,
-                  itemBuilder: (context, index) {
+                  itemCount: (snapshot.data!.articles!.length) //> 10 ? 10 :(snapshot.data!.articles!.length) ,
+                  ,itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: NewsCard(
                           headline: snapshot
-                              .data!.response!.docs![index].headline!.main!,
+                              .data!.articles![index].title!,
                           imgUrl: snapshot
-                              .data!.response!.docs![index].multimedia![0].url!,
+                              .data?.articles?[index].urlToImage,
                           snippet:
-                              snapshot.data!.response!.docs![index].abstract!,
+                              snapshot.data?.articles?[index].description,
                           author: snapshot
-                              .data!.response!.docs![index].byline!.original!,
-                          webUrl: snapshot.data!.response!.docs![index].webUrl!,
-                          date: snapshot.data!.response!.docs![index].pubDate!),
+                              .data?.articles?[index].author,
+                          webUrl: snapshot.data!.articles![index].url!,
+                          date: snapshot.data!.articles![index].publishedAt!, publisher: snapshot.data!.articles![index].source!.name!,),
                     );
                   });
             }

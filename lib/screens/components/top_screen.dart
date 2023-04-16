@@ -1,12 +1,16 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_news_app/view_model/theme_viewmodel.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
-class TopScreen extends StatelessWidget {
-  const TopScreen({super.key, required this.prov});
-  final ThemeProvider prov;
+class MyAppBar extends StatelessWidget {
+  const MyAppBar({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,18 +19,28 @@ class TopScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            'Khabar',
-            style: GoogleFonts.lato(
-                // letterSpacing: 1.1,
-                fontStyle: FontStyle.italic,
+          Row(
+            children: [
+              Icon(
+                CupertinoIcons.news,
                 color: Theme.of(context).accentColor,
-                fontWeight: FontWeight.bold),
-            textScaleFactor: 1.7,
+                weight: 0.5,
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Text(
+                'Khabar',
+                style: GoogleFonts.lato(
+                    // letterSpacing: 1.1,
+                    fontStyle: FontStyle.italic,
+                    color: Theme.of(context).accentColor,
+                    fontWeight: FontWeight.bold),
+                textScaleFactor: 1.7,
+              ),
+            ],
           ),
-          SwitchButton(
-            prov: prov,
-          )
+          const SwitchButton()
         ],
       ),
     );
@@ -34,11 +48,13 @@ class TopScreen extends StatelessWidget {
 }
 
 class SwitchButton extends StatelessWidget {
-  const SwitchButton({super.key, required this.prov});
+  const SwitchButton({
+    super.key,
+  });
 
-  final ThemeProvider prov;
   @override
   Widget build(BuildContext context) {
+    final prov = context.watch<ThemeProvider>();
     return Transform.scale(
         scale: 0.8,
         child: FlutterSwitch(
