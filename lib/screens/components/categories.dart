@@ -76,8 +76,6 @@ class Categories extends StatelessWidget {
   }
 }
 
-
-
 class NewsCard extends StatelessWidget {
   NewsCard(
       {super.key,
@@ -103,10 +101,7 @@ class NewsCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(
             horizontal: 8.0,
           ),
-          child:
-             
-
-              Column(
+          child: Column(
             children: [
               Flex(
                 direction: Axis.horizontal,
@@ -123,6 +118,27 @@ class NewsCard extends StatelessWidget {
                             style: const TextStyle(
                                 fontFamily: 'Georgia',
                                 fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: SizedBox(
+                                height: height * .20,
+                                width: double.infinity,
+                                child: (imgUrl != null)
+                                    ? Image.network(
+                                        imgUrl!,
+                                        fit: BoxFit.fill,
+                                      )
+                                    : Image.asset(
+                                        'assets/images/noimage.png',
+                                        color: Theme.of(context).buttonColor,
+                                      )),
+                          ),
+                          const SizedBox(
+                            height: 10,
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -141,18 +157,18 @@ class NewsCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: SizedBox(
-                        height: height * .17,
-                        width: 100,
-                        child: (imgUrl != null)
-                            ? Image.network(
-                                imgUrl!,
-                                fit: BoxFit.fill,
-                              )
-                            : Image.asset('assets/images/no-image.png')),
-                  )
+                  // ClipRRect(
+                  //   borderRadius: BorderRadius.circular(10),
+                  //   child: SizedBox(
+                  //       height: height * .17,
+                  //       width: 200,
+                  //       child: (imgUrl != null)
+                  //           ? Image.network(
+                  //               imgUrl!,
+                  //               fit: BoxFit.fill,
+                  //             )
+                  //           : Image.asset('assets/images/no-image.png')),
+                  // )
                 ],
               ),
               Row(
